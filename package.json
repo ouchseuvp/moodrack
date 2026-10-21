@@ -3,8 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
+    "electron": "electron .",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
