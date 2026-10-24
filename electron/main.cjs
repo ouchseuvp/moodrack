@@ -9,7 +9,7 @@ function createWindow() {
     resizable: false,
     maximizable: false,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "preload.cjs"),
     },
   });
 
