@@ -1,8 +1,19 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain  } = require("electron");
 const path = require("path");
 
 function createWindow() {
-  const win = new BrowserWindow({ width: 1200, height: 800 });
+  const win = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    frame: false,
+    resizable: false,
+    maximizable: false,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  win.removeMenu();
 
   if (!app.isPackaged) {
     win.loadURL("http://localhost:5173");
@@ -10,6 +21,18 @@ function createWindow() {
     win.loadFile(path.join(__dirname, "../dist/index.html"));
   }
 }
+// кнопки окна
+ipcMain.on("window:minimize", (event) => {
+  BrowserWindow.fromWebContents(event.sender).minimize();
+});
 
-app.whenReady().then(createWindow);
+ipcMain.on("window:close", (event) => {
+  BrowserWindow.fromWebContents(event.sender).close();
+});
+
+app.whenReady().then(() => {
+  Menu.setApplicationMenu(null);
+  createWindow();
+});
+
 app.on("window-all-closed", () => app.quit());
